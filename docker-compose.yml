@@ -2,7 +2,7 @@
 ## https://help.penpot.app/technical-guide/configuration/#advanced-configuration
 
 x-flags: &penpot-flags
-  PENPOT_FLAGS: enable-smtp enable-prepl-server disable-onboarding-newsletter enable-webhooks disable-registration disable-onboarding-questions disable-onboarding-newsletter disable-onboarding-team enable-login-with-google
+  PENPOT_FLAGS: enable-smtp enable-prepl-server disable-onboarding enable-webhooks disable-registration enable-login-with-google
 
 x-uri: &penpot-public-uri
   PENPOT_PUBLIC_URI: ${PUBLIC_URI}
@@ -15,7 +15,7 @@ services:
     image: "penpotapp/frontend:latest"
     restart: always
     ports:
-      - 10000:8080
+      - 10000:80
 
     depends_on:
       - penpot-backend
