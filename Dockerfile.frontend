@@ -1,3 +1,5 @@
 FROM penpotapp/frontend:latest
 
 RUN sed -i -e 's/add_header content-type \"\$real_mtype\";/add_header content-type \"\$real_mtype\";\nproxy_ssl_server_name on;/g' /etc/nginx/nginx.conf
+
+CMD ["nginx", "-g", "daemon off;"]
