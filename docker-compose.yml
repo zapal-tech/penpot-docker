@@ -9,8 +9,6 @@ x-uri: &penpot-public-uri
 
 networks:
   penpot:
-  bridge:
-    external: true
 
 services:
   penpot-frontend:
@@ -25,7 +23,6 @@ services:
 
     networks:
       - penpot
-      - bridge
 
     environment:
       <<: *penpot-flags
