@@ -1,0 +1,92 @@
+## You can read more about all available flags and other environment variables here:
+## https://help.penpot.app/technical-guide/configuration/#advanced-configuration
+
+x-flags: &penpot-flags
+  PENPOT_FLAGS: enable-smtp enable-prepl-server disable-onboarding-newsletter enable-webhooks disable-registration disable-onboarding-questions disable-onboarding-newsletter disable-onboarding-team enable-login-with-google
+
+x-uri: &penpot-public-uri
+  PENPOT_PUBLIC_URI: ${PUBLIC_URI}
+
+networks:
+  penpot:
+
+services:
+  penpot-frontend:
+    image: "penpotapp/frontend:latest"
+    restart: always
+    ports:
+      - 9001:8080
+
+    depends_on:
+      - penpot-backend
+      - penpot-exporter
+
+    networks:
+      - penpot
+
+    environment:
+      <<: *penpot-flags
+
+  penpot-backend:
+    image: "penpotapp/backend:latest"
+    restart: always
+
+    networks:
+      - penpot
+
+    environment:
+      <<: [*penpot-flags, *penpot-public-uri]
+
+      ## Penpot SECRET KEY. It serves as a master key from which other keys for subsystems
+      ## (eg http sessions, or invitations) are derived.
+      ##
+      ## If you leave it commented, all created sessions and invitations will
+      ## become invalid on container restart.
+      ##
+      ## If you going to uncomment this, we recommend to use a trully randomly generated
+      ## 512 bits base64 encoded string here.  You can generate one with:
+      ##
+      ## python3 -c "import secrets; print(secrets.token_urlsafe(64))"
+
+      PENPOT_SECRET_KEY: ${SECRET_KEY}
+
+      ## The PREPL host. Mainly used for external programatic access to penpot backend
+      ## (example: admin). By default it will listen on `localhost` but if you are going to use
+      ## the `admin`, you will need to uncomment this and set the host to `0.0.0.0`.
+
+      # PENPOT_PREPL_HOST: 0.0.0.0
+
+      PENPOT_DATABASE_URI: ${DB_URI}
+      PENPOT_DATABASE_USERNAME: ${DB_USERNAME}
+      PENPOT_DATABASE_PASSWORD: ${DB_PASSWORD}
+
+      PENPOT_REDIS_URI: ${REDIS_URI}
+
+      AWS_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY}
+      PENPOT_ASSETS_STORAGE_BACKEND: assets-s3
+      PENPOT_STORAGE_ASSETS_S3_ENDPOINT: ${S3_ENDPOINT}
+      PENPOT_STORAGE_ASSETS_S3_REGION: ${S3_REGION}
+      PENPOT_STORAGE_ASSETS_S3_BUCKET: ${S3_BUCKET}
+
+      PENPOT_TELEMETRY_ENABLED: true
+
+      PENPOT_SMTP_DEFAULT_FROM: ${SMTP_FROM}
+      PENPOT_SMTP_DEFAULT_REPLY_TO: ${SMTP_REPLY_TO}
+      PENPOT_SMTP_HOST: ${SMTP_HOST}
+      PENPOT_SMTP_PORT: ${SMTP_PORT}
+      PENPOT_SMTP_USERNAME: ${SMTP_USERNAME}
+      PENPOT_SMTP_PASSWORD: ${SMTP_PASSWORD}
+      PENPOT_SMTP_TLS: ${SMTP_TLS:-false}
+      PENPOT_SMTP_SSL: ${SMTP_SSL:-false}
+
+  penpot-exporter:
+    image: "penpotapp/exporter:latest"
+    restart: always
+    networks:
+      - penpot
+
+    environment:
+      # Don't touch it; this uses an internal docker network to communicate with the frontend.
+      PENPOT_PUBLIC_URI: http://penpot-frontend
+      PENPOT_REDIS_URI: ${REDIS_URI}
