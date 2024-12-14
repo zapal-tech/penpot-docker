@@ -15,7 +15,7 @@ services:
     image: "penpotapp/frontend:latest"
     restart: always
     ports:
-      - 9001:8080
+      - 10000:8080
 
     depends_on:
       - penpot-backend
