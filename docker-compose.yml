@@ -12,7 +12,9 @@ networks:
 
 services:
   penpot-frontend:
-    image: "penpotapp/frontend:latest"
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
     restart: always
     ports:
       - 10000:80
