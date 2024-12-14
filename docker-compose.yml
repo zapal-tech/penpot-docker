@@ -80,6 +80,10 @@ services:
       PENPOT_SMTP_TLS: ${SMTP_TLS:-false}
       PENPOT_SMTP_SSL: ${SMTP_SSL:-false}
 
+      # Auth with Google
+      PENPOT_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      PENPOT_GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+
   penpot-exporter:
     image: "penpotapp/exporter:latest"
     restart: always
