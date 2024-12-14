@@ -9,6 +9,8 @@ x-uri: &penpot-public-uri
 
 networks:
   penpot:
+  bridge:
+    external: true
 
 services:
   penpot-frontend:
@@ -23,6 +25,7 @@ services:
 
     networks:
       - penpot
+      - bridge
 
     environment:
       <<: *penpot-flags
@@ -30,6 +33,9 @@ services:
   penpot-backend:
     image: "penpotapp/backend:latest"
     restart: always
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
     networks:
       - penpot
