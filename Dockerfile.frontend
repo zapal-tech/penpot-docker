@@ -1,5 +1,5 @@
 FROM penpotapp/frontend:latest
 
-RUN sed -i -e 's/location \/assets {/location \/assets {\nproxy_set_header Host design.zapal.design;\nproxy_ssl_server_name on;/g' /etc/nginx/nginx.conf.template
+RUN sed -i -e 's/location @handle_redirect {/location @handle_redirect {\nproxy_ssl_server_name on;/g' /etc/nginx/nginx.conf.template
 
 CMD ["nginx", "-g", "daemon off;"]
