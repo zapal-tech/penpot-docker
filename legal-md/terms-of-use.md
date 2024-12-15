@@ -4,7 +4,6 @@ These terms and conditions (“Terms and Conditions”) explain the general term
 
 Our identification data are as follows:
 
-- Tax ID number: ESW0249639F
 - Address: Mechnykova street 2a, Kyiv, Ukraine, 02000
 - Email address: [hello@zapal.design](mailto:hello@zapal.design)
 
