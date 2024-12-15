@@ -89,6 +89,8 @@ services:
       PENPOT_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       PENPOT_GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
 
+      PENPOT_REGISTRATION_DOMAIN_WHITELIST: ${REGISTRATION_DOMAIN_WHITELIST}
+
   penpot-exporter:
     image: "penpotapp/exporter:latest"
     restart: always
