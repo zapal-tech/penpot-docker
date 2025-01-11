@@ -33,8 +33,8 @@ services:
     image: "penpotapp/backend:latest"
     restart: always
 
-    # extra_hosts:
-    #   - "host.docker.internal:host-gateway"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
     networks:
       - penpot
@@ -96,6 +96,9 @@ services:
     restart: always
     networks:
       - penpot
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
     environment:
       # Don't touch it; this uses an internal docker network to communicate with the frontend.
