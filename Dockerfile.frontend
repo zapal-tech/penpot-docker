@@ -2,7 +2,7 @@ FROM penpotapp/frontend:latest
 
 COPY ./legal-generated-html/* /var/www/app
 
-RUN for file in /var/www/app/js/*.js; do sed -i -e 's|https:/penpot.app/terms|https:/design.zapal.tech/terms-of-use.html|g' $file; done;
-RUN for file in /var/www/app/js/*.js; do sed -i -e 's|https:/penpot.app/privacy|https:/design.zapal.tech/privacy-policy.html|g' $file; done;
+RUN for file in /var/www/app/js/*.js; do sed -i -e 's|https://penpot.app/terms|https://design.zapal.tech/terms-of-use.html|g' $file; done;
+RUN for file in /var/www/app/js/*.js; do sed -i -e 's|https://penpot.app/privacy|https://design.zapal.tech/privacy-policy.html|g' $file; done;
 
 CMD ["nginx", "-g", "daemon off;"]
