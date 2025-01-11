@@ -2,7 +2,7 @@ FROM penpotapp/frontend:latest
 
 COPY ./legal-generated-html/* /var/www/app
 
-RUN sed -i -e 's/https:\/\/penpot.app\/terms/https:\/\/design.zapal.tech\/terms-of-use.html/g' /etc/nginx/nginx.conf.template
-RUN sed -i -e 's/https:\/\/penpot.app\/privacy/https:\/\/design.zapal.tech\/privacy-policy.html/g' /etc/nginx/nginx.conf.template
+RUN sed -i -e 's/https:\/\/penpot.app\/terms/https:\/\/design.zapal.tech\/terms-of-use.html/g' /var/www/app/js/main.*.js
+RUN sed -i -e 's/https:\/\/penpot.app\/privacy/https:\/\/design.zapal.tech\/privacy-policy.html/g' /var/www/app/js/main.*.js
 
 CMD ["nginx", "-g", "daemon off;"]
