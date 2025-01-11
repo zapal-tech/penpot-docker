@@ -5,7 +5,7 @@ COPY ./legal-generated-html/* /var/www/app
 RUN for file in /var/www/app/js/*.js; do sed -i -e 's|https://penpot.app/terms|https://design.zapal.tech/terms-of-use.html|g' $file; done;
 RUN for file in /var/www/app/js/*.js; do sed -i -e 's|https://penpot.app/privacy|https://design.zapal.tech/privacy-policy.html|g' $file; done;
 
-RUN sed -i -i "s|</body>|<script defer>if(location.hash === '#/auth/register'){[...document.querySelectorAll(`a[href='https://penpot.app/privacy']`)].map(link => link.href='https://design.zapal.design/privacy-policy.html')}</script></body>|g" /var/www/index.html
-RUN sed -i -i "s|</body>|<script defer>if(location.hash === '#/auth/register'){[...document.querySelectorAll(`a[href='https://penpot.app/terms']`)].map(link => link.href='https://design.zapal.design/terms-of-use.html')}</script></body>|g" /var/www/index.html
+RUN sed -i -e "s|</body>|<script defer>if(location.hash === '#/auth/register'){[...document.querySelectorAll(`a[href='https://penpot.app/privacy']`)].map(link => link.href='https://design.zapal.design/privacy-policy.html')}</script></body>|g" /var/www/index.html
+RUN sed -i -e "s|</body>|<script defer>if(location.hash === '#/auth/register'){[...document.querySelectorAll(`a[href='https://penpot.app/terms']`)].map(link => link.href='https://design.zapal.design/terms-of-use.html')}</script></body>|g" /var/www/index.html
 
 CMD ["nginx", "-g", "daemon off;"]
