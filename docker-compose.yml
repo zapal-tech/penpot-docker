@@ -2,7 +2,7 @@
 ## https://help.penpot.app/technical-guide/configuration/#advanced-configuration
 
 x-flags: &penpot-flags
-  PENPOT_FLAGS: enable-smtp enable-prepl-server disable-onboarding enable-webhooks enable-email-verification disable-login enable-login-with-google enable-email-whitelist
+  PENPOT_FLAGS: enable-smtp enable-prepl-server disable-onboarding enable-webhooks enable-email-verification disable-login-with-password enable-login-with-google enable-email-whitelist
 
 x-uri: &penpot-public-uri
   PENPOT_PUBLIC_URI: ${PUBLIC_URI}
