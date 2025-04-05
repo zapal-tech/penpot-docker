@@ -58,7 +58,6 @@ services:
       ## The PREPL host. Mainly used for external programatic access to penpot backend
       ## (example: admin). By default it will listen on `localhost` but if you are going to use
       ## the `admin`, you will need to uncomment this and set the host to `0.0.0.0`.
-
       # PENPOT_PREPL_HOST: 0.0.0.0
 
       PENPOT_DATABASE_URI: ${DB_URI}
