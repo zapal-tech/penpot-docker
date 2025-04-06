@@ -4,8 +4,11 @@
 x-flags: &penpot-flags
   PENPOT_FLAGS: enable-smtp enable-prepl-server disable-onboarding enable-webhooks enable-email-verification disable-login-with-password enable-login-with-google enable-email-whitelist
 
-x-uri: &penpot-public-uri
+x-public-uri: &public-uri
   PENPOT_PUBLIC_URI: ${PUBLIC_URI}
+
+x-redis-uri: &redis-uri
+  REDIS_URI: ${REDIS_URI}
 
 networks:
   penpot:
@@ -15,32 +18,36 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.frontend
-    restart: always
+    restart: unless-stopped
     ports:
       - 10000:8080
-
     depends_on:
       - penpot-backend
       - penpot-exporter
-
     networks:
       - penpot
-
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:80"]
+      interval: 2s
+      timeout: 10s
+      retries: 15
     environment:
       <<: *penpot-flags
 
   penpot-backend:
     image: "penpotapp/backend:latest"
-    restart: always
-
+    restart: unless-stopped
     extra_hosts:
       - "host.docker.internal:host-gateway"
-
     networks:
       - penpot
-
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:6060/readyz"]
+      interval: 2s
+      timeout: 10s
+      retries: 15
     environment:
-      <<: [*penpot-flags, *penpot-public-uri]
+      <<: [*penpot-flags, *public-uri, *redis-uri]
 
       ## Penpot SECRET KEY. It serves as a master key from which other keys for subsystems
       ## (eg http sessions, or invitations) are derived.
@@ -63,8 +70,6 @@ services:
       PENPOT_DATABASE_URI: ${DB_URI}
       PENPOT_DATABASE_USERNAME: ${DB_USERNAME}
       PENPOT_DATABASE_PASSWORD: ${DB_PASSWORD}
-
-      PENPOT_REDIS_URI: ${REDIS_URI}
 
       AWS_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY}
@@ -92,14 +97,17 @@ services:
 
   penpot-exporter:
     image: "penpotapp/exporter:latest"
-    restart: always
+    restart: unless-stopped
     networks:
       - penpot
-
     extra_hosts:
       - "host.docker.internal:host-gateway"
-
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:6061/readyz"]
+      interval: 2s
+      timeout: 10s
+      retries: 15
     environment:
+      <<: *redis-uri
       # Don't touch it; this uses an internal docker network to communicate with the frontend.
       PENPOT_PUBLIC_URI: http://penpot-frontend
-      PENPOT_REDIS_URI: ${REDIS_URI}
