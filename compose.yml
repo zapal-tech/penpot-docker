@@ -8,7 +8,7 @@ x-public-uri: &public-uri
   PENPOT_PUBLIC_URI: ${PUBLIC_URI}
 
 x-redis-uri: &redis-uri
-  REDIS_URI: ${REDIS_URI}
+  PENPOT_REDIS_URI: ${REDIS_URI}
 
 # networks:
 #   penpot:
