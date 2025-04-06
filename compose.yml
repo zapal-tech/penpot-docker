@@ -10,8 +10,8 @@ x-public-uri: &public-uri
 x-redis-uri: &redis-uri
   REDIS_URI: ${REDIS_URI}
 
-networks:
-  penpot:
+# networks:
+#   penpot:
 
 services:
   penpot-frontend:
@@ -37,10 +37,10 @@ services:
   penpot-backend:
     image: "penpotapp/backend:latest"
     restart: unless-stopped
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    networks:
-      - penpot
+    # extra_hosts:
+    #   - host.docker.internal:host-gateway
+    # networks:
+    #   - penpot
     healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1:6060/readyz"]
       interval: 2s
@@ -98,10 +98,10 @@ services:
   penpot-exporter:
     image: "penpotapp/exporter:latest"
     restart: unless-stopped
-    networks:
-      - penpot
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    # networks:
+    #   - penpot
+    # extra_hosts:
+    #   - host.docker.internal:host-gateway
     healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1:6061/readyz"]
       interval: 2s
