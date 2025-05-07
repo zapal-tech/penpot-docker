@@ -110,4 +110,4 @@ services:
     environment:
       <<: *redis-uri
       # Don't touch it; this uses an internal docker network to communicate with the frontend.
-      PENPOT_PUBLIC_URI: http://penpot-frontend
+      PENPOT_PUBLIC_URI: http://penpot-frontend:8080
