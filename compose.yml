@@ -2,7 +2,9 @@
 ## https://help.penpot.app/technical-guide/configuration/#advanced-configuration
 
 x-flags: &penpot-flags
-  PENPOT_FLAGS: enable-smtp enable-prepl-server disable-onboarding disable-subscriptions-old enable-webhooks enable-email-verification disable-login-with-password enable-login-with-google enable-email-whitelist
+  PENPOT_FLAGS: enable-smtp enable-prepl-server disable-onboarding
+    disable-subscriptions-old enable-webhooks enable-email-verification
+    disable-login-with-password enable-login-with-google enable-email-whitelist
 
 x-public-uri: &public-uri
   PENPOT_PUBLIC_URI: ${PUBLIC_URI}
@@ -15,9 +17,7 @@ x-redis-uri: &redis-uri
 
 services:
   penpot-frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
+    image: "penpotapp/frontend:latest"
     restart: unless-stopped
     ports:
       - 10000:8080
@@ -27,7 +27,7 @@ services:
     # networks:
     #   - penpot
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:80"]
+      test: [ "CMD", "curl", "-f", "http://127.0.0.1:80" ]
       interval: 2s
       timeout: 10s
       retries: 15
@@ -42,12 +42,12 @@ services:
     # networks:
     #   - penpot
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:6060/readyz"]
+      test: [ "CMD", "curl", "-f", "http://127.0.0.1:6060/readyz" ]
       interval: 2s
       timeout: 10s
       retries: 15
     environment:
-      <<: [*penpot-flags, *public-uri, *redis-uri]
+      <<: [ *penpot-flags, *public-uri, *redis-uri ]
 
       ## Penpot SECRET KEY. It serves as a master key from which other keys for subsystems
       ## (eg http sessions, or invitations) are derived.
@@ -103,7 +103,7 @@ services:
     # extra_hosts:
     #   - host.docker.internal:host-gateway
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:6061/readyz"]
+      test: [ "CMD", "curl", "-f", "http://127.0.0.1:6061/readyz" ]
       interval: 2s
       timeout: 10s
       retries: 15
