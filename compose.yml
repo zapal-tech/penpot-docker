@@ -4,7 +4,7 @@
 x-flags: &penpot-flags
   PENPOT_FLAGS: enable-smtp enable-prepl-server disable-onboarding
     disable-subscriptions-old enable-webhooks enable-email-verification
-    disable-login-with-password enable-login-with-google enable-email-whitelist
+    disable-registration enable-login-with-oidc enable-oidc-registration
 
 x-public-uri: &public-uri
   PENPOT_PUBLIC_URI: ${PUBLIC_URI}
@@ -17,7 +17,7 @@ x-redis-uri: &redis-uri
 
 services:
   penpot-frontend:
-    image: "penpotapp/frontend:latest"
+    image: "penpotapp/frontend:2.14.4"
     restart: unless-stopped
     ports:
       - 10000:8080
@@ -35,7 +35,7 @@ services:
       <<: *penpot-flags
 
   penpot-backend:
-    image: "penpotapp/backend:latest"
+    image: "penpotapp/backend:2.14.4"
     restart: unless-stopped
     # extra_hosts:
     #   - host.docker.internal:host-gateway
@@ -73,10 +73,10 @@ services:
 
       AWS_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY}
-      PENPOT_ASSETS_STORAGE_BACKEND: assets-s3
-      PENPOT_STORAGE_ASSETS_S3_ENDPOINT: ${S3_ENDPOINT}
-      PENPOT_STORAGE_ASSETS_S3_REGION: ${S3_REGION}
-      PENPOT_STORAGE_ASSETS_S3_BUCKET: ${S3_BUCKET}
+      PENPOT_OBJECTS_STORAGE_BACKEND: s3
+      PENPOT_OBJECTS_STORAGE_S3_ENDPOINT: ${S3_ENDPOINT}
+      PENPOT_OBJECTS_STORAGE_S3_REGION: ${S3_REGION}
+      PENPOT_OBJECTS_STORAGE_S3_BUCKET: ${S3_BUCKET}
 
       PENPOT_TELEMETRY_ENABLED: true
 
@@ -89,14 +89,15 @@ services:
       PENPOT_SMTP_TLS: ${SMTP_TLS:-false}
       PENPOT_SMTP_SSL: ${SMTP_SSL:-false}
 
-      # Auth with Google
-      PENPOT_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
-      PENPOT_GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-
-      PENPOT_REGISTRATION_DOMAIN_WHITELIST: ${REGISTRATION_DOMAIN_WHITELIST}
+      # Auth with Keycloak (OIDC)
+      ## Callback URL to configure in Keycloak: ${PUBLIC_URI}/api/auth/oidc/callback
+      PENPOT_OIDC_CLIENT_ID: ${OIDC_CLIENT_ID}
+      PENPOT_OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET}
+      ## Keycloak realm base URI, e.g. https://keycloak.example.com/realms/myrealm
+      PENPOT_OIDC_BASE_URI: ${OIDC_BASE_URI}
 
   penpot-exporter:
-    image: "penpotapp/exporter:latest"
+    image: "penpotapp/exporter:2.14.4"
     restart: unless-stopped
     # networks:
     #   - penpot
@@ -109,5 +110,6 @@ services:
       retries: 15
     environment:
       <<: *redis-uri
+      PENPOT_SECRET_KEY: ${SECRET_KEY}
       # Don't touch it; this uses an internal docker network to communicate with the frontend.
       PENPOT_PUBLIC_URI: http://penpot-frontend:8080
