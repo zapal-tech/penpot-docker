@@ -33,6 +33,7 @@ services:
       retries: 15
     environment:
       <<: *penpot-flags
+      PENPOT_OIDC_NAME: ${OIDC_NAME}
 
   penpot-backend:
     image: "penpotapp/backend:2.15"
@@ -86,7 +87,6 @@ services:
       PENPOT_OIDC_CLIENT_ID: ${OIDC_CLIENT_ID}
       PENPOT_OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET}
       PENPOT_OIDC_BASE_URI: ${OIDC_BASE_URI}
-      PENPOT_OIDC_NAME: ${OIDC_NAME}
 
   penpot-mcp:
     image: "penpotapp/mcp:2.15"
