@@ -17,7 +17,7 @@ x-redis-uri: &redis-uri
 
 services:
   penpot-frontend:
-    image: "penpotapp/frontend:2.14.5"
+    image: "penpotapp/frontend:2.15"
     restart: unless-stopped
     ports:
       - 10000:8080
@@ -27,7 +27,7 @@ services:
     # networks:
     #   - penpot
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://127.0.0.1:80" ]
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:80"]
       interval: 2s
       timeout: 10s
       retries: 15
@@ -35,19 +35,19 @@ services:
       <<: *penpot-flags
 
   penpot-backend:
-    image: "penpotapp/backend:2.14.5"
+    image: "penpotapp/backend:2.15"
     restart: unless-stopped
     # extra_hosts:
     #   - host.docker.internal:host-gateway
     # networks:
     #   - penpot
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://127.0.0.1:6060/readyz" ]
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:6060/readyz"]
       interval: 2s
       timeout: 10s
       retries: 15
     environment:
-      <<: [ *penpot-flags, *public-uri, *redis-uri ]
+      <<: [*penpot-flags, *public-uri, *redis-uri]
 
       ## If you going to uncomment this, we recommend to use a trully randomly generated
       ## 512 bits base64 encoded string here.  You can generate one with:
@@ -89,14 +89,14 @@ services:
       PENPOT_OIDC_NAME: ${OIDC_NAME}
 
   penpot-exporter:
-    image: "penpotapp/exporter:2.14.5"
+    image: "penpotapp/exporter:2.15"
     restart: unless-stopped
     # networks:
     #   - penpot
     # extra_hosts:
     #   - host.docker.internal:host-gateway
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://127.0.0.1:6061/readyz" ]
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:6061/readyz"]
       interval: 2s
       timeout: 10s
       retries: 15
