@@ -88,6 +88,21 @@ services:
       PENPOT_OIDC_BASE_URI: ${OIDC_BASE_URI}
       PENPOT_OIDC_NAME: ${OIDC_NAME}
 
+  penpot-mcp:
+    image: "penpotapp/mcp:2.15"
+    restart: unless-stopped
+    # networks:
+    #   - penpot
+    ports:
+      - 10010:4401
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:4401/health"]
+      interval: 2s
+      timeout: 10s
+      retries: 15
+    environment:
+      PENPOT_MCP_REMOTE_MODE: "true"
+
   penpot-exporter:
     image: "penpotapp/exporter:2.15"
     restart: unless-stopped
