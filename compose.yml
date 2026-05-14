@@ -2,7 +2,7 @@
 ## https://help.penpot.app/technical-guide/configuration/#advanced-configuration
 
 x-flags: &penpot-flags
-  PENPOT_FLAGS: enable-smtp enable-prepl-server disable-onboarding
+  PENPOT_FLAGS: enable-smtp enable-prepl-server disable-onboarding enable-mcp
     disable-subscriptions-old enable-webhooks enable-email-verification
     disable-registration enable-login-with-oidc enable-oidc-registration
 
@@ -101,7 +101,10 @@ services:
       timeout: 10s
       retries: 15
     environment:
+      <<: *redis-uri
+      PENPOT_MCP_SERVER_HOST: "0.0.0.0"
       PENPOT_MCP_REMOTE_MODE: "true"
+      PENPOT_PUBLIC_URI: http://penpot-frontend:8080
 
   penpot-exporter:
     image: "penpotapp/exporter:2.15"
