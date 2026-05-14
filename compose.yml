@@ -17,7 +17,7 @@ x-redis-uri: &redis-uri
 
 services:
   penpot-frontend:
-    image: "penpotapp/frontend:2.15"
+    image: "penpotapp/frontend:2.15.2"
     restart: unless-stopped
     ports:
       - 10000:8080
@@ -36,7 +36,7 @@ services:
       PENPOT_OIDC_NAME: ${OIDC_NAME}
 
   penpot-backend:
-    image: "penpotapp/backend:2.15"
+    image: "penpotapp/backend:2.15.2"
     restart: unless-stopped
     # extra_hosts:
     #   - host.docker.internal:host-gateway
@@ -89,7 +89,7 @@ services:
       PENPOT_OIDC_BASE_URI: ${OIDC_BASE_URI}
 
   penpot-mcp:
-    image: "penpotapp/mcp:2.15"
+    image: "penpotapp/mcp:2.15.2"
     restart: unless-stopped
     # networks:
     #   - penpot
@@ -105,7 +105,7 @@ services:
       PENPOT_MCP_REMOTE_MODE: "true"
 
   penpot-exporter:
-    image: "penpotapp/exporter:2.15"
+    image: "penpotapp/exporter:2.15.2"
     restart: unless-stopped
     # networks:
     #   - penpot
