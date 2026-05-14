@@ -101,10 +101,8 @@ services:
       timeout: 10s
       retries: 15
     environment:
-      <<: *redis-uri
       PENPOT_MCP_SERVER_HOST: "0.0.0.0"
       PENPOT_MCP_REMOTE_MODE: "true"
-      PENPOT_PUBLIC_URI: http://penpot-frontend:8080
 
   penpot-exporter:
     image: "penpotapp/exporter:2.15"
